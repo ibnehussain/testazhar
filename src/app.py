@@ -74,3 +74,11 @@ def signup_for_activity(activity_name: str, email: str):
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+
+# M4 DEBUG LAB — intentionally broken
+def calculate_capacity_remaining(activity):
+    """Returns remaining capacity for an activity."""
+    max_participants = activity.get("max_participants")
+    current = activity.get("participants", [])
+    # BUG: crashes when max_participants is None
+    return max_participants - len(current)
