@@ -7,7 +7,7 @@ prompts:
     Place the new route below signup_for_activity(). Use existing imports only; do not add new imports. Output only the new route + function.
 
 providers:
-  - id: github:gpt-4o-mini
+  - id: github:gpt-5-mini
 
 tests:
 
