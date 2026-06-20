@@ -29,7 +29,7 @@ tests:
       - type: contains
         value: "jsonify"
 
-  - description: "Output returns 404 for not found"
+  - description: "Output uses 404 status for not found"
     assert:
       - type: contains
-        value: "404"
+        value: "status_code=404"
