@@ -1,4 +1,3 @@
-# .github/workflows/eval.yml
 name: Copilot Eval Gate
 
 on: [pull_request]
@@ -12,14 +11,23 @@ jobs:
       - name: Install promptfoo
         run: npm install -g promptfoo
 
+      - name: Validate required secrets
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          test -n "$GITHUB_TOKEN" || (echo "GITHUB_TOKEN is not available" && exit 1)
+
       - name: Run evals
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: promptfoo eval --output results.json
 
       - name: Check pass rate
         run: |
-          PASS=$(cat results.json | python3 -c "
-          import sys, json
-          d = json.load(sys.stdin)
+          PASS=$(python3 -c "
+          import json
+          with open('results.json') as f:
+              d = json.load(f)
           s = d['results']['stats']
           rate = s['successes'] / s['total'] * 100
           print(f'{rate:.1f}')
