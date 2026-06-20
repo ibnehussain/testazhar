@@ -1,4 +1,4 @@
-# promptfooconfig.yaml
+# promptfooconfig.yml
 prompts:
   - |
     Add a new Flask route function called get_activity to src/app.py.
