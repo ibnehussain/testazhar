@@ -53,13 +53,11 @@ def root():
 def get_activities():
     return activities
 
-
 @app.get("/activities/{activity_name}")
 def get_activity(activity_name: str):
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Activity not found")
     return activities[activity_name]
-
 
 # ============================================================
 # UAT-LOCKED: This route has passed UAT. DO NOT MODIFY.
@@ -76,4 +74,5 @@ def signup_for_activity(activity_name: str, email: str):
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+
 
