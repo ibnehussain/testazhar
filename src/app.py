@@ -53,6 +53,12 @@ def root():
 def get_activities():
     return activities
 
+#function to add two numbers
+def add_numbers(a: int, b: int) -> int:
+    return a + b
+
+
+
 # ============================================================
 # UAT-LOCKED: This route has passed UAT. DO NOT MODIFY.
 # ============================================================
@@ -68,4 +74,6 @@ def signup_for_activity(activity_name: str, email: str):
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+
+
 
