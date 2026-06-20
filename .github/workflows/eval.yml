@@ -32,6 +32,6 @@ jobs:
           rate = s['successes'] / s['total'] * 100
           print(f'{rate:.1f}')
           ")
-                    echo "Eval pass rate: $PASS%"
-                    python3 -c "exit(0 if float('$PASS') >= 80 else 1)" || \
-                      (echo "BLOCKED: Pass rate $PASS% is below 80% threshold." && exit 1)
+          echo "Eval pass rate: $PASS%"
+          python3 -c "exit(0 if float('$PASS') >= 80 else 1)" || \
+            (echo "BLOCKED: Pass rate $PASS% is below 80% threshold." && exit 1)
