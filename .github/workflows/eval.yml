@@ -1,0 +1,29 @@
+# .github/workflows/eval.yml
+name: Copilot Eval Gate
+
+on: [pull_request]
+
+jobs:
+  eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install promptfoo
+        run: npm install -g promptfoo
+
+      - name: Run evals
+        run: promptfoo eval --output results.json
+
+      - name: Check pass rate
+        run: |
+          PASS=$(cat results.json | python3 -c "
+          import sys, json
+          d = json.load(sys.stdin)
+          s = d['results']['stats']
+          rate = s['successes'] / s['total'] * 100
+          print(f'{rate:.1f}')
+          ")
+          echo "Eval pass rate: $PASS%"
+          python3 -c "exit(0 if float('$PASS') >= 80 else 1)" || \
+            (echo "BLOCKED: Pass rate $PASS% is below 80% threshold." && exit 1)
