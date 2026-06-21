@@ -463,7 +463,7 @@ prompts:
     Format: Single function named get_activity_count with a one-line docstring.
 
 providers:
-  - openai:gpt-4o
+  - openai:gpt-5 mini
 
 tests:
 
