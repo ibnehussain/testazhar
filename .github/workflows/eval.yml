@@ -1,41 +1,33 @@
 name: Copilot Eval Gate
- 
-on: [pull_request]
- 
+
+on:
+  pull_request:
+
 permissions:
+  contents: read
   models: read
-#
+
 jobs:
   eval:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
- 
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
       - name: Install promptfoo
         run: npm install -g promptfoo
- 
+
       - name: Validate required secrets
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           test -n "$GITHUB_TOKEN" || (echo "GITHUB_TOKEN is not available" && exit 1)
- 
-      - name: Run evals (with retry for transient 5xx)
+
+      - name: Run evals
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          set -euo pipefail
-          ATTEMPTS=3
-          for i in $(seq 1 $ATTEMPTS); do
-            echo "Eval attempt $i/$ATTEMPTS..."
-            if promptfoo eval --output results.json; then
-              echo "Eval succeeded."
-              exit 0
-            fi
-            if [ "$i" -lt "$ATTEMPTS" ]; then
-              echo "Eval failed (likely transient API issue). Retrying in 10s..."
-              sleep 10
-            fi
-          done
-          echo "Eval failed after $ATTEMPTS attempts."
-          exit 1
+        run: promptfoo eval --output results.json

@@ -1,3 +1,4 @@
+# promptfooconfig.yml
 prompts:
 - |
   Add a new Flask route function called get_activity_count to src/app.py.
@@ -16,7 +17,7 @@ prompts:
   Format: Single function named get_activity_count with a one-line docstring.
 
 providers:
-- openai:gpt-5 mini
+- openai:gpt-5-mini
 
 tests:
 - description: "Output contains the correct function name"
