@@ -71,3 +71,14 @@ def signup_for_activity(activity_name: str, email: str):
     return {"message": f"Signed up {email} for {activity_name}"}
 
 
+@app.get("/activities/{name}/is-full")
+def check_activity_is_full(name: str):
+    """Check if an activity has reached its max_participants limit"""
+    if name not in activities:
+        raise HTTPException(status_code=404, detail="Activity not found")
+    
+    activity = activities[name]
+    is_full = len(activity["participants"]) >= activity["max_participants"]
+    return {"activity": name, "is_full": is_full}
+
+
