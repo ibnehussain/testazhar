@@ -61,3 +61,32 @@ def test_root_redirects():
     response = client.get("/", follow_redirects=False)
     assert response.status_code in (302, 307)
     assert "/static/index.html" in response.headers["location"]
+
+
+def test_is_full_activity_not_full():
+    """Test is_full endpoint returns false for activity with available spots"""
+    response = client.get("/activities/Gym Class/is-full")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["activity"] == "Gym Class"
+    assert data["is_full"] is False
+
+
+def test_is_full_activity_is_full():
+    """Test is_full endpoint returns true when activity reaches max_participants"""
+    # Fill up the Chess Club (max 12, currently 2)
+    for i in range(10):
+        activities["Chess Club"]["participants"].append(f"student{i}@mergington.edu")
+    
+    response = client.get("/activities/Chess Club/is-full")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["activity"] == "Chess Club"
+    assert data["is_full"] is True
+
+
+def test_is_full_activity_not_found():
+    """Test is_full endpoint returns 404 for nonexistent activity"""
+    response = client.get("/activities/Nonexistent Activity/is-full")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Activity not found"
