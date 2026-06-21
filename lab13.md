@@ -90,21 +90,32 @@ Complete every field. Be specific — "all existing files" is not a valid UAT-lo
 │  AI SCOPE STATEMENT                                     │
 ├─────────────────────────────────────────────────────────┤
 │  Task:                                                  │
-│                                                         │
+│    Add endpoint  GET /activities/{activity_name}        │
+│     #Input - activity_name                              │
+│     #output - Full activity detail in Json              │ 
+│               If not exists return 404                  │                           
 │                                                         │
 ├─────────────────────────────────────────────────────────┤
 │  In scope (files Copilot MAY touch):                    │
-│                                                         │
+│         src/app.py -  new function  only                    
+│         src/tests/test_app.py - new test function only                                       
 │                                                         │
 ├─────────────────────────────────────────────────────────┤
 │  UAT-locked (files Copilot must NEVER modify):          │
-│                                                         │
-│                                                         │
-│                                                         │
+│          src/app.py - get_activities()
+|                 signup_for_activity()  
+                  remove_signup_for_activity()                 
+│          src/tests/test_app.py -test_get_activities_returns_all()
+│                    test_get_activities_has_expected_fields()                
+│                    test_signup_success()                                     
+│                    test_signup_invalid_activity()
+│                    test_root_redirects()
 ├─────────────────────────────────────────────────────────┤
 │  Tests (must remain passing after this session):        │
-│                                                         │
-│                                                         │
+│      All the existing test functionality should pass    │                                            
+│      New functionality should test with and without 
+       existing activity_name
+                     
 ├─────────────────────────────────────────────────────────┤
 │  Reviewed by: ________________________  Date: _______   │
 └─────────────────────────────────────────────────────────┘
@@ -220,10 +231,10 @@ Look for the GitHub Copilot extension in Extensions Tab.
 
 ```
 What did Copilot suggest?
-______________________________________________________________
+_@app.get("/welcome")_____________________________________________________________
 ______________________________________________________________
 
-Did it suggest touching any existing function?  □ Yes  □ No
+Did it suggest touching any existing function?  □ Yes  □ No -No
 
 Press ESCAPE now — do NOT accept the suggestion.
 ```
@@ -241,17 +252,15 @@ What files can you currently see in this project?
 
 ```
 Files Copilot reports seeing:
-______________________________________________________________
-______________________________________________________________
-______________________________________________________________
+Workspace root folders like testazhar_main 
+Project folder inside the workspace 
+app.py file and other folders inside src folder 
 
-Does it know which routes have passed UAT?    □ Yes  □ No
-Does it know what your test results are?      □ Yes  □ No
+Does it know which routes have passed UAT?    □ Yes  □ No -> No
+Does it know what your test results are?      □ Yes  □ No -> No
 
 What does this tell you about why copilot-instructions.md matters?
-______________________________________________________________
-______________________________________________________________
-```
+_copilot-instruction is required to make co-pilot understand the instructions like scope, UAT-Locked file and the expected output.```
 
 ---
 
@@ -352,12 +361,13 @@ What did Copilot say or suggest?
 
 ```
 □ It refused or added a disclaimer about NEVER_MODIFY
-□ It still suggested changes to signup()
+□ It still suggested changes to signup() -> suggested the change
 □ Mixed — it suggested some changes
 
 If it still suggested changes to signup() — what does that tell you?
-______________________________________________________________
-______________________________________________________________
+__Updated the signup logic in src/app.py . 
+Its not taking instruction from instruction file  
+
 (Hint: The answer is why git diff review is mandatory — it's coming in Lab 4)
 ```
 
@@ -378,8 +388,8 @@ Refactor the signup() function in src/app.py to improve its error handling.
 Compare: does Copilot behave differently without the instructions file?
 
 ```
-With instructions file: ________________________________________
-Without instructions file: _____________________________________
+With instructions file: _____should not modify UST-Locked file ___________________________________
+Without instructions file: __suggesting changes for sign-up function ___________________________________
 
 Restore the file now:
 ```
@@ -467,7 +477,7 @@ Red flags present:
 □ No format specified
 
 What would Copilot likely do to our UAT-locked routes?
-_________________________________________________________________
+___It will touch those routes also as scope is missing in prompt for what not to touch______________________________________________________________
 ```
 
 ---
@@ -485,7 +495,7 @@ Red flags present:
 □ No UAT-locked list mentioned
 
 Which UAT-locked function is most at risk from this prompt and why?
-_________________________________________________________________
+_________All the UAT-Locked-Function________________________________________________________
 ```
 
 ---
@@ -503,7 +513,7 @@ Red flags present:
 □ No assertion requirements specified
 
 What is the worst-case outcome from this prompt?
-_________________________________________________________________
+_____________It may touch the existing test features also and try to modify/delete it ____________________________________________________
 ```
 
 ---
@@ -521,7 +531,7 @@ Red flags present:
 □ "More robust" may mean changing return types or status codes
 
 Why is this prompt especially dangerous for this codebase?
-_________________________________________________________________
+___________Its touching the mail functionality of the codebase ______________________________________________________
 ```
 
 ---
@@ -534,8 +544,9 @@ Fix the calculate_capacity_remaining function in app.py.
 Red flags present (this one is closer — spot the remaining issues):
 ```
 □ Better: targets a specific function
-□ Still missing: _______________________________________________
-□ Still missing: _______________________________________________
+□ Still missing: 
+General term "Fix" without giving "exact expected o/p" may touch the correct functionality also 
+□ Still missing: may target UAT-Locked functionality()
 □ Still missing: _______________________________________________
 ```
 
@@ -554,27 +565,19 @@ The task for all five is in the context of the Mergington app. Use the UAT-locke
 ```
 [Your rewrite — must include Task, Scope, Constraint, Format]
 
+Task: Add the new feature to get single-activity
+     GET /activities/{activity_name}        
+     #Input - activity_name                              
+     #output - Full activity detail in Json              │
+               If not exists return 404
 
+Scope:Add the new feature in app.py
+      Add the new test feature in test_app.py
+      Dont' touch UAT-LOCKED functionality in app.py and test_app.py
 
+Constraint: 
 
-Task:
-
-
-
-
-Scope:
-
-
-
-
-Constraint:
-
-
-
-
-Format:
-
-
+Format: JSON Output format
 
 ```
 
@@ -585,24 +588,15 @@ Format:
 **Rewrite of Prompt 2** — Add error handling to the `get_activity` function ONLY
 
 ```
-Task:
+Task: Add error handling to the `get_activity` function ONLY
 
+Scope: Modify /app.py/get_activities
+       Don't touch other functionality in app.py
+       Don't touch test_app.py
 
+Constraint: 
 
-
-Scope:
-
-
-
-
-Constraint:
-
-
-
-
-Format:
-
-
+Format: return correct HTTP code
 
 ```
 
@@ -613,22 +607,15 @@ Format:
 **Rewrite of Prompt 3** — Add tests for the new `get_activity` endpoint
 
 ```
-Task:
+Task: Adding new test cases to test get_activity function
 
-
-
-
-Scope:
-
-
-
+Scope: Add new function in test_app.py to test get_activity()
+       don't touch existing function in test_app.py
+       don't touch app.py
 
 Constraint:
 
-
-
-
-Format:
+Format: JSON output format
 
 
 
@@ -650,7 +637,8 @@ __________________________________________________________________
 
 Write the response you would send to the requester:
 
-"Hi [name], I cannot use Copilot to modify signup() because ________
+"Hi [name], I cannot use Copilot to modify signup() because 
+The function has already passed UAT and should not be modified.
 _________________________________________________________________
 _________________________________________________________________"
 ```
@@ -660,20 +648,13 @@ _________________________________________________________________"
 **Rewrite of Prompt 5** — Fix the `calculate_capacity_remaining` bug (safe to modify)
 
 ```
-Task:
+Task: Find the bug in calculate_capacity_remaining functionality
+      Propose a fix for the bug
 
-
-
-
-Scope:
-
-
-
-
+Scope: function calculate_capacity_remaining() in app_py
+       Don't touch other functionality in app.py
+       Don't touch test.py
 Constraint:
-
-
-
 
 Format:
 
@@ -696,6 +677,7 @@ Files Copilot's suggestion would touch (guess from the output):
 __________________________________________________________________
 
 Would it have touched any UAT-locked function?  □ Yes  □ No  □ Maybe
+Yes
 ```
 
 **Strong prompt result:**
@@ -705,12 +687,14 @@ Files Copilot's suggestion would touch:
 __________________________________________________________________
 
 Would it have touched any UAT-locked function?  □ Yes  □ No  □ Maybe
+No
 ```
 
 **What was the key difference?**
 
 ```
-__________________________________________________________________
+______with week  prompt got new functionality 
+______with strong promot got new functionality and corresponding test cases
 __________________________________________________________________
 ```
 

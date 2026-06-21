@@ -7,7 +7,7 @@ for extracurricular activities at Mergington High School.
 
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse
+from fastapi.responses import RedirectResponse, JSONResponse
 import os
 from pathlib import Path
 
@@ -69,5 +69,18 @@ def signup_for_activity(activity_name: str, email: str):
     # Add student
     activity["participants"].append(email)
     return {"message": f"Signed up {email} for {activity_name}"}
+
+@app.get("/activities/")
+def get_empty_activity():
+    """Return the same not-found payload for an empty activity name."""
+    return JSONResponse(status_code=404, content={"error": "Activity not found"})
+
+
+@app.get("/activities/{activity_name}")
+def get_activity(activity_name: str):
+    """Return details for a specific activity."""
+    if activity_name not in activities:
+        return JSONResponse(status_code=404, content={"error": "Activity not found"})
+    return JSONResponse(status_code=200, content=activities[activity_name])
 
 

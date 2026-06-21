@@ -39,9 +39,14 @@ pytest src/tests/test_app.py -v
 Record the test results before any Copilot session:
 
 ```
-Tests passing before Copilot session: ______ / ______
+Tests passing before Copilot session: _5 passed_____ / ______
 
 List the test names (you'll need these for comparison later):
+1.src/tests/test_app.py::test_get_activities_returns_all PASSED
+2.src/tests/test_app.py::test_get_activities_has_expected_fields PASSED
+3.src/tests/test_app.py::test_signup_success PASSED
+4.src/tests/test_app.py::test_signup_invalid_activity PASSED
+5.src/tests/test_app.py::test_root_redirects PASSED
 1. _____________________________________________________________
 2. _____________________________________________________________
 3. _____________________________________________________________
@@ -79,20 +84,20 @@ Format: Single function named get_activity with a one-line docstring.
 
 ```
 Does the suggested function name match what was requested?
-□ Yes: get_activity     □ No — it was named: ___________________
+□ Yes: get_activity     □ No — it was named: yes : get_activity ___________________
 
 Does the suggestion appear to be in the right location (below remove_signup)?
-□ Yes     □ No — it appears to be placed at: ___________________
+□ Yes     □ No — it appears to be placed at: _yes - below signup__________________
 
 Does the suggestion include any changes to existing functions?
 □ No changes to existing functions
-□ Yes — it touches: ____________________________________________
+□ Yes — it touches: ____no, it didn't touch existing functionality_______________________________________
 
 Does the suggestion use jsonify()?
-□ Yes     □ No
+□ Yes     □ No  - used JSON Response
 
 Does it return 404 for not-found activities?
-□ Yes     □ No
+□ Yes     □  - Yes
 ```
 
 **If all answers are correct, accept the suggestion (Tab or Apply in editor).**
