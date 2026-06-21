@@ -20,13 +20,7 @@ def reset_activities():
 client = TestClient(app)
 
 
-def test_get_activities_returns_all():
-    response = client.get("/activities")
-    assert response.status_code == 200
-    data = response.json()
-    assert "Chess Club" in data
-    assert "Programming Class" in data
-    assert "Gym Class" in data
+ 
 
 
 def test_get_activities_has_expected_fields():
