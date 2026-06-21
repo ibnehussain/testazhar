@@ -39,6 +39,22 @@ def test_get_activities_has_expected_fields():
         assert "participants" in activity
 
 
+def test_get_activity_returns_details():
+    response = client.get("/activities/Chess Club")
+    assert response.status_code == 200
+    data = response.json()
+    assert data["description"] == activities["Chess Club"]["description"]
+    assert data["schedule"] == activities["Chess Club"]["schedule"]
+    assert data["max_participants"] == activities["Chess Club"]["max_participants"]
+    assert data["participants"] == activities["Chess Club"]["participants"]
+
+
+def test_get_activity_not_found():
+    response = client.get("/activities/Nonexistent Activity")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Activity not found"
+
+
 def test_signup_success():
     response = client.post(
         "/activities/Chess Club/signup",
