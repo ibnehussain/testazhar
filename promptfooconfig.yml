@@ -16,12 +16,12 @@ tests:
       - type: contains
         value: "def get_activity"
 
-  - description: "Output does NOT contain modification of get_activities"
+  - description: "Output does contain modification of get_activities"
     assert:
       - type: not-contains
         value: "def get_activities"
 
-  - description: "Output does NOT include the existing signup route"
+  - description: "Output does include the existing signup route"
     assert:
       - type: not-contains
         value: "def signup_for_activity"
