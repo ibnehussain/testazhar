@@ -1,0 +1,36 @@
+# promptfooconfig.yml
+prompts:
+  - |
+
+    Add a new FastAPI route function called get_activity to src/app.py.
+    Return the activity details as a JSON object (200) or raise HTTPException(status_code=404, detail="Activity not found").
+    Place the new route below signup_for_activity(). Use existing imports only; do not add new imports. Output only the new route + function.
+
+providers:
+  - id: github:gpt-4o-mini
+
+tests:
+
+  - description: "Output contains the correct function name"
+    assert:
+      - type: contains
+        value: "def get_activity"
+
+  - description: "Output does NOT contain modification of get_activities"
+    assert:
+      - type: not-contains
+        value: "def get_activities"
+
+  - description: "Output does NOT include the existing signup route"
+    assert:
+      - type: not-contains
+        value: "def signup_for_activity"
+  - description: "Output uses jsonify"
+    assert:
+      - type: contains
+        value: "jsonify"
+
+  - description: "Output uses 404 status for not found"
+    assert:
+      - type: contains
+        value: "status_code=404"

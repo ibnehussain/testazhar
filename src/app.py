@@ -53,12 +53,14 @@ def root():
 def get_activities():
     return activities
 
+
 @app.get("/activities/{activity_name}")
 def get_activity(activity_name: str):
     """Return details for a single activity."""
     if activity_name not in activities:
         raise HTTPException(status_code=404, detail="Activity not found")
     return activities[activity_name]
+
 
 # ============================================================
 # UAT-LOCKED: This route has passed UAT. DO NOT MODIFY.
@@ -86,8 +88,4 @@ def is_activity_full(name: str):
     activity = activities[name]
     is_full = len(activity["participants"]) >= activity["max_participants"]
     return {"activity": name, "is_full": is_full}
-
-
-# Add a new route that returns a welcome message for the school
-
 

@@ -55,6 +55,36 @@ def test_get_activity_not_found():
     assert response.json()["detail"] == "Activity not found"
 
 
+def test_get_activity_is_full_false():
+    response = client.get("/activities/Chess Club/is-full")
+    assert response.status_code == 200
+    assert response.json() == {
+        "activity": "Chess Club",
+        "is_full": False
+    }
+
+
+def test_get_activity_is_full_true():
+    activities["Chess Club"]["participants"] = [
+        f"student{i}@mergington.edu" for i in range(
+            activities["Chess Club"]["max_participants"]
+        )
+    ]
+
+    response = client.get("/activities/Chess Club/is-full")
+    assert response.status_code == 200
+    assert response.json() == {
+        "activity": "Chess Club",
+        "is_full": True
+    }
+
+
+def test_get_activity_is_full_not_found():
+    response = client.get("/activities/Nonexistent Activity/is-full")
+    assert response.status_code == 404
+    assert response.json()["detail"] == "Activity not found"
+
+
 def test_signup_success():
     response = client.post(
         "/activities/Chess Club/signup",
