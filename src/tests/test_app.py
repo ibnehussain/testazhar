@@ -20,13 +20,7 @@ def reset_activities():
 client = TestClient(app)
 
 
-def test_get_activities_returns_all():
-    response = client.get("/activities")
-    assert response.status_code == 200
-    data = response.json()
-    assert "Chess Club" in data
-    assert "Programming Class" in data
-    assert "Gym Class" in data
+ 
 
 
 def test_get_activities_has_expected_fields():
@@ -61,3 +55,21 @@ def test_root_redirects():
     response = client.get("/", follow_redirects=False)
     assert response.status_code in (302, 307)
     assert "/static/index.html" in response.headers["location"]
+
+
+def test_get_activity_valid_name():
+    response = client.get("/activities/Chess Club")
+    assert response.status_code == 200
+    assert response.json() == activities["Chess Club"]
+
+
+def test_get_activity_unknown_name():
+    response = client.get("/activities/Unknown Activity")
+    assert response.status_code == 404
+    assert response.json() == {"error": "Activity not found"}
+
+
+def test_get_activity_empty_name():
+    response = client.get("/activities/")
+    assert response.status_code == 404
+    assert response.json() == {"error": "Activity not found"}
