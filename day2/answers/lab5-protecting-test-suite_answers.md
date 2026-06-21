@@ -5,11 +5,11 @@
 ### Step 1
 
 ```bash
-pytest src/tests/test_app.py -v --collect-only
+pytest testazhar\src\tests\test_app.py -v --collect-only
 ```
 
 Record the exact test count:
-
+![alt text](image.png)
 ```text
 Tests collected: <your exact count>
 ```
@@ -41,7 +41,7 @@ could be weakened to only check the status code.
 ## Part B — Safe Prompt
 
 ```text
-Add new unit tests for the get_activity() route to src/tests/test_app.py.
+Add new unit tests for the get_activity() route to testazhar\src\tests\test_app.py.
 
 Task: Write pytest test functions that cover:
   1. Valid activity name → returns 200 and full details
@@ -94,7 +94,7 @@ Sample PR description:
 Added tests for the `get_activity()` endpoint.
 
 ## Scope
-Only `src/tests/test_app.py` was modified.
+Only `testazhar\src\tests\test_app.py` was modified.
 
 ## UAT-Protected Functions
 - `get_activities()`
