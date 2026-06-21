@@ -10,6 +10,7 @@ Use when asked to: "add a new endpoint", "add a new route", "implement
 an API for [feature name]" in the Mergington activities codebase.
 
 ## Constraints
+
 ### NEVER_MODIFY — UAT-locked
 - get_activities() in src/app.py
 - signup() in src/app.py
@@ -27,6 +28,7 @@ an API for [feature name]" in the Mergington activities codebase.
 - Coverage must not drop
 
 ## Examples
+
 ### Input
 "Add GET /activities/{name}/participants that returns the participant list"
 
@@ -35,6 +37,7 @@ A single new Flask route function below remove_signup() that uses
 jsonify() and returns HTTP 200 or 404.
 
 ## DRI
-Tech Lead — [name]
+Tech Lead — Rahul
+
 ## Version
-v1.0 — [date]
+v1.0 — 2026-06-21
