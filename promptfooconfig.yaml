@@ -1,0 +1,55 @@
+prompts:
+- |
+  Add a new Flask route function called get_activity_count to src/app.py.
+
+  Task: Implement GET /activities/<string:activity_name>/count that returns
+  {"activity": name, "participant_count": N} with HTTP 200, or
+  {"error": "Activity not found"} with HTTP 404 if not found.
+
+  Scope: Add this function BELOW remove_signup(). Do NOT modify
+  get_activities(), signup(), or remove_signup(). Do NOT touch
+  src/tests/test_app.py or src/static/.
+
+  Constraint: Use jsonify() for all responses. Return HTTP 200 or 404 only.
+  Do not add new import statements. Do not change the ACTIVITIES dictionary.
+
+  Format: Single function named get_activity_count with a one-line docstring.
+
+providers:
+- openai:gpt-4o
+
+tests:
+- description: "Output contains the correct function name"
+  assert:
+  - type: contains
+    value: "def get_activity_count"
+
+- description: "Output uses the correct route path"
+  assert:
+  - type: contains
+    value: "/count"
+
+- description: "Output does NOT modify get_activities — UAT-locked"
+  assert:
+  - type: not-contains
+    value: "def get_activities"
+
+- description: "Output does NOT modify signup — UAT-locked"
+  assert:
+  - type: not-contains
+    value: "def signup"
+
+- description: "Output does NOT modify remove_signup — UAT-locked"
+  assert:
+  - type: not-contains
+    value: "def remove_signup"
+
+- description: "Output uses jsonify"
+  assert:
+  - type: contains
+    value: "jsonify"
+
+- description: "Output returns 404 for not-found activities"
+  assert:
+  - type: contains
+    value: "404"
