@@ -77,6 +77,17 @@ def signup_for_activity(activity_name: str, email: str):
     return {"message": f"Signed up {email} for {activity_name}"}
 
 
+@app.get("/activities/{name}/is-full")
+def is_activity_full(name: str):
+    """Return whether the requested activity has reached its max capacity."""
+    if name not in activities:
+        raise HTTPException(status_code=404, detail="Activity not found")
+
+    activity = activities[name]
+    is_full = len(activity["participants"]) >= activity["max_participants"]
+    return {"activity": name, "is_full": is_full}
+
+
 # Add a new route that returns a welcome message for the school
 
 
