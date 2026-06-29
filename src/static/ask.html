@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask About Activities</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            padding: 40px;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .input-wrapper {
+            display: flex;
+            gap: 10px;
+        }
+
+        input[type="text"] {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        button {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-area {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-area.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .answer-box {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+
+        .meta-info {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .source-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #e8eaf6;
+            color: #5e35b1;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .source-badge.rag {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+
+        .source-badge.text2sql {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .source-badge.direct {
+            background: #fff3e0;
+            color: #e65100;
+        }
+
+        .confidence-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: #f3e5f5;
+            color: #6a1b9a;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .confidence-badge.high {
+            background: #c8e6c9;
+            color: #1b5e20;
+        }
+
+        .error-box {
+            background: #ffebee;
+            border-left: 4px solid #c62828;
+            padding: 16px;
+            border-radius: 8px;
+            color: #b71c1c;
+            display: none;
+        }
+
+        .error-box.active {
+            display: block;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #666;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #f3f3f3;
+            border-top: 2px solid #667eea;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-right: 8px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Ask About Activities</h1>
+        <p class="subtitle">Get information about our activities from our AI assistant</p>
+
+        <div class="form-group">
+            <label for="question">Ask about our activities</label>
+            <div class="input-wrapper">
+                <input 
+                    type="text" 
+                    id="question" 
+                    placeholder="e.g., 'Tell me about Chess Club' or 'How many students joined?'"
+                    autocomplete="off"
+                >
+                <button id="submitBtn" onclick="askQuestion()">Ask</button>
+            </div>
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            Getting answer...
+        </div>
+
+        <div class="error-box" id="errorBox"></div>
+
+        <div class="result-area" id="resultArea">
+            <div class="answer-box" id="answerBox"></div>
+            <div class="meta-info" id="metaInfo"></div>
+        </div>
+
+        <a href="/static/index.html" class="back-link">← Back to Activities</a>
+    </div>
+
+    <script>
+        const questionInput = document.getElementById('question');
+        const submitBtn = document.getElementById('submitBtn');
+        const loading = document.getElementById('loading');
+        const errorBox = document.getElementById('errorBox');
+        const resultArea = document.getElementById('resultArea');
+        const answerBox = document.getElementById('answerBox');
+        const metaInfo = document.getElementById('metaInfo');
+
+        // Allow Enter key to submit
+        questionInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                askQuestion();
+            }
+        });
+
+        async function askQuestion() {
+            const question = questionInput.value.trim();
+
+            // Validate input
+            if (!question) {
+                showError('Please ask a question first.');
+                return;
+            }
+
+            // Clear previous results and errors
+            errorBox.classList.remove('active');
+            resultArea.classList.remove('active');
+            loading.classList.add('active');
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question: question })
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // Handle error responses
+                    showError(data.error || 'Something went wrong. Please try again.');
+                    return;
+                }
+
+                // Display results
+                displayResult(data);
+
+            } catch (error) {
+                showError(`Network error: ${error.message}. Is the server running?`);
+            } finally {
+                loading.classList.remove('active');
+                submitBtn.disabled = false;
+            }
+        }
+
+        function displayResult(data) {
+            // Display answer
+            answerBox.textContent = data.answer || 'No answer available.';
+            resultArea.classList.add('active');
+
+            // Build meta info
+            metaInfo.innerHTML = '';
+
+            // Add source badge
+            const sourceMap = {
+                'rag': 'Answered from knowledge base',
+                'text2sql': 'Answered from database',
+                'direct': 'Direct answer'
+            };
+
+            const sourceLabel = sourceMap[data.source] || 'Unknown source';
+            const sourceBadge = document.createElement('span');
+            sourceBadge.className = `source-badge ${data.source || 'direct'}`;
+            sourceBadge.textContent = sourceLabel;
+            metaInfo.appendChild(sourceBadge);
+
+            // Add confidence badge only if confidence > 0.5
+            if (data.confidence !== undefined && data.confidence > 0.5) {
+                const confidenceBadge = document.createElement('span');
+                confidenceBadge.className = 'confidence-badge high';
+                confidenceBadge.textContent = `Confidence: ${Math.round(data.confidence * 100)}%`;
+                metaInfo.appendChild(confidenceBadge);
+            }
+        }
+
+        function showError(message) {
+            errorBox.textContent = message;
+            errorBox.classList.add('active');
+            resultArea.classList.remove('active');
+        }
+    </script>
+</body>
+</html>
