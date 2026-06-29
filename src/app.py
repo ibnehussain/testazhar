@@ -10,6 +10,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, JSONResponse
 import os
 from pathlib import Path
+from src.extensions.kb_extension import rag_search
+from src.sql.text2sql import run_text2sql
 
 app = FastAPI(title="Mergington High School API",
               description="API for viewing and signing up for extracurricular activities")
@@ -202,21 +204,3 @@ async def ask(request: Request):
     
     except Exception as e:
         return JSONResponse({"error": "classification failed"}, status_code=500)
-
-
-# Stubs — Developer B will replace with real implementations
-def rag_search(question: str) -> dict:
-    """Placeholder: returns stub RAG answer."""
-    return {
-        "answer": f"[RAG stub] Answer about: {question}",
-        "source": "rag",
-        "confidence": 0.0
-    }
-
-def run_text2sql(question: str) -> dict:
-    """Placeholder: returns stub Text2SQL answer."""
-    return {
-        "answer": f"[Text2SQL stub] Data answer for: {question}",
-        "source": "text2sql",
-        "confidence": 0.0
-    }
